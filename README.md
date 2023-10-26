@@ -7,3 +7,5 @@ Dilemma: How can we implement Single Sign-On (SSO) in the most efficient way and
   <img src="problem-1.png" alt="problem" width="800">
   <br>
 </h1>
+
+Goal: Implement Single Sing-On (SSO) with least amout of work possible.
