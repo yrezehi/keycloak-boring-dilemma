@@ -9,3 +9,11 @@ Dilemma: How can we implement Single Sign-On (SSO) in the most efficient way and
 </h1>
 
 Goal: Implement Single Sing-On (SSO) with least amout of work possible.
+
+## Third Party Authenticator
+
+<h1 align="center">
+  <br>
+  <img src="3rd-party-auth.png" alt="problem" width="800">
+  <br>
+</h1>
