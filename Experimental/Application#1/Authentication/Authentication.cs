@@ -2,5 +2,8 @@
 {
     public class Authentication
     {
+        public Authentication() { }
+
+        public bool Authenticate() => true;
     }
 }
