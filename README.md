@@ -17,3 +17,10 @@ Goal: Implement Single Sing-On (SSO) with least amout of work possible.
   <img src="3rd-party-auth.png" alt="problem" width="800">
   <br>
 </h1>
+
+## Proposal
+
+### - First Proposal
+
+Keep claims as is in their applications and introduce a middleware to map the claims to the unified identity
+
