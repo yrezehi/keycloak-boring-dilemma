@@ -11,13 +11,13 @@ namespace ThirdPartyAuthentication.Caches
         public bool Contains(string key) =>
             Cache.TryGetValue(key, out _);
 
-        public void Remove(string name, string key) =>
+        public void Remove(string key) =>
             Cache.Remove(key);
 
-        public void Set<T>(string name, string key, T value) =>
+        public void Set<T>(string key, T value) =>
             Cache.Set(key, value);
 
-        public T? Get<T>(string name, string key) =>
+        public T? Get<T>(string key) =>
             Cache.TryGetValue(key, out T? value) ? value : default;
     }
 }
