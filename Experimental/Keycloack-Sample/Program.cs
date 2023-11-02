@@ -15,8 +15,6 @@ builder.Services.AddAuthorization(options => options.AddPolicy("IsAdmin", builde
     {
         builder.RequireRealmRoles("admin");
         builder.RequireResourceRoles("r-admin");
-        // TokenValidationParameters.RoleClaimType is overriden
-        // by KeycloakRolesClaimsTransformation
         builder.RequireRole("r-admin");
     }))
     .AddKeycloakAuthorization(builder.Configuration.GetSection(KeycloakProtectionClientOptions.Section).Get<KeycloakProtectionClientOptions>()!);
