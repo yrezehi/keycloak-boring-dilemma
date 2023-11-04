@@ -13,7 +13,7 @@ builder.Services.AddAuthentication(options =>
 {
     //Sets cookie authentication scheme
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme; 
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
 
@@ -75,11 +75,16 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+} else
+{
+    app.UseDeveloperExceptionPage();
 }
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
