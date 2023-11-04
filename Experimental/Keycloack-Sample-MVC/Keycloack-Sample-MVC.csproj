@@ -7,4 +7,8 @@
     <RootNamespace>Keycloack_Sample_MVC</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.13" />
+  </ItemGroup>
+
 </Project>
