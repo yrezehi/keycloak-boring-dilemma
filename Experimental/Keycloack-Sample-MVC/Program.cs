@@ -43,7 +43,7 @@ builder.Services.AddAuthentication(options =>
                 //Keycloak client ID
                 options.ClientId = builder.Configuration.GetSection("Keycloak")["ClientId"];
                 //Keycloak client secret
-                options.ClientSecret = builder.Configuration.GetSection("Keycloak")["ClientSecret"];
+                //options.ClientSecret = builder.Configuration.GetSection("Keycloak")["ClientSecret"];
                 //Keycloak .wellknown config origin to fetch config
                 options.MetadataAddress = builder.Configuration.GetSection("Keycloak")["Metadata"];
                 //Require keycloak to use SSL
@@ -58,6 +58,7 @@ builder.Services.AddAuthentication(options =>
                 //SameSite is needed for Chrome/Firefox, as they will give http error 500 back, if not set to unspecified.
                 options.NonceCookie.SameSite = SameSiteMode.Unspecified;
                 options.CorrelationCookie.SameSite = SameSiteMode.Unspecified;
+                options.RequireHttpsMetadata = false;
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
