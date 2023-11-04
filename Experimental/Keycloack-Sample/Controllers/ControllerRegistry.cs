@@ -8,7 +8,7 @@ namespace Keycloack_Sample.Controllers
             application.IndexEndpoint();
 
         private static void IndexEndpoint(this WebApplication application) =>
-            application.MapGet("/", (ClaimsPrincipal principal) =>
+            application.MapGet("/", (ClaimsPrincipal principal) => 
                 Results.Ok(principal.Identity!.Name)
             );
     }

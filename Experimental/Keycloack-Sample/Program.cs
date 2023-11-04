@@ -1,7 +1,4 @@
 using Keycloack_Sample.Controllers;
-using Keycloak.AuthServices.Authentication;
-using Keycloak.AuthServices.Authorization;
-using Keycloak.AuthServices.Sdk.Admin;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
@@ -37,18 +34,8 @@ builder.Services.AddSwaggerGen(setup =>
 
 });
 
-// keycloack integration
-builder.Services.AddKeycloakAuthentication(builder.Configuration.GetSection(KeycloakAuthenticationOptions.Section).Get<KeycloakAuthenticationOptions>()!);
-
-builder.Services.AddAuthorization(options => options.AddPolicy("IsAdmin", builder =>
-    {
-        builder.RequireRealmRoles("admin");
-        builder.RequireResourceRoles("r-admin");
-        builder.RequireRole("r-admin");
-    }))
-    .AddKeycloakAuthorization(builder.Configuration.GetSection(KeycloakProtectionClientOptions.Section).Get<KeycloakProtectionClientOptions>()!);
-
-builder.Services.AddKeycloakAdminHttpClient(builder.Configuration.GetSection(KeycloakAdminClientOptions.Section).Get<KeycloakAdminClientOptions>()!);
+builder.Services
+    .AddAuthorization();
 
 var app = builder.Build();
 
