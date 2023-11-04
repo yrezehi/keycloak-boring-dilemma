@@ -1,3 +1,4 @@
+using Keycloack_Sample_MVC.Util;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -5,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
+
+ConfigurationUtil.Initialize(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

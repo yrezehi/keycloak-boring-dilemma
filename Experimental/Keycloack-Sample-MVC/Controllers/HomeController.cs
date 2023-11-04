@@ -1,4 +1,5 @@
 ﻿using Keycloack_Sample_MVC.Models;
+using Keycloack_Sample_MVC.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -34,7 +35,7 @@ namespace Keycloack_Sample_MVC.Controllers
              * Token exchange implementation
              * Uncomment section below
              */
-            /*
+            
             //Call a token exchange to call another service in keycloak
             //Remember to implement a logger with the default constructor for more visibility
             TokenExchange exchange = new TokenExchange();
@@ -45,7 +46,7 @@ namespace Keycloack_Sample_MVC.Controllers
             //Example:
             // MyService myService = new MyService/();
             //var myService = await myService.GetDataAboutSomethingAsync(serviceAccessToken):
-            */
+            
 
             //Get all claims for roles that you have been granted access to 
             IEnumerable<Claim> roleClaims = User.FindAll(ClaimTypes.Role);
