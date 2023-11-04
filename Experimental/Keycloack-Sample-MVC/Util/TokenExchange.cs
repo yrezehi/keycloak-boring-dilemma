@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Keycloack_Sample_MVC.Util
 {
@@ -10,6 +11,40 @@ namespace Keycloack_Sample_MVC.Util
         {
         }
 
+        public async Task<string> GetTokenAsync()
+        {
+            /*
+             * Get refresh token
+             * Uses the settings injected from startup to read the configuration
+             */
+            try
+            {
+                string url = ConfigurationUtil.GetValue<string>("Keycloak:TokenExchange");
+                //Important the grant type fro refresh token, must be set to this!
+                string grant_type = "password";
+                string client_id = ConfigurationUtil.GetValue<string>("Keycloak:ClientId");
+                string token = refreshToken;
+
+                var form = new Dictionary<string, string>
+                {
+                    {"grant_type", grant_type},
+                    {"client_id", client_id},
+                    {"username", "test@test.com"},
+                    {"password", "password"},
+                    {"client_secret", "Tgx4lvbyhho7oNFmiIupDRVA8ioQY7PW"}
+                };
+
+                HttpResponseMessage tokenResponse = await client.PostAsync(url, new FormUrlEncodedContent(form));
+                var jsonContent = await tokenResponse.Content.ReadAsStringAsync();
+                Token tok = JsonConvert.DeserializeObject<Token>(jsonContent);
+                return tok.AccessToken;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
         public async Task<string> GetRefreshTokenAsync(string refreshToken)
         {
             /*
@@ -18,11 +53,11 @@ namespace Keycloack_Sample_MVC.Util
              */
             try
             {
-                string url = ConfigurationUtil.Configuration["Keycloak:TokenExchange"];
+                string url = ConfigurationUtil.GetValue<string>("Keycloak:TokenExchange");
                 //Important the grant type fro refresh token, must be set to this!
                 string grant_type = "refresh_token";
-                string client_id = ConfigurationUtil.Configuration["Keycloak:ClientId"];
-                string client_secret = ConfigurationUtil.Configuration["Keycloak:ClientSecret"];
+                string client_id = ConfigurationUtil.GetValue<string>("Keycloak:ClientId");
+                string client_secret = ConfigurationUtil.GetValue<string>("Keycloak:ClientSecret");
                 string token = refreshToken;
 
                 var form = new Dictionary<string, string>
@@ -52,12 +87,12 @@ namespace Keycloack_Sample_MVC.Util
              */
             try
             {
-                string url = ConfigurationUtil.Configuration["Keycloak:TokenExchange"];
+                string url = ConfigurationUtil.GetValue<string>("Keycloak:TokenExchange");
                 //Important, the grant types for token exchange, must be set to this!
                 string grant_type = "urn:ietf:params:oauth:grant-type:token-exchange";
-                string client_id = ConfigurationUtil.Configuration["Keycloak:ClientId"];
-                string client_secret = ConfigurationUtil.Configuration["Keycloak:ClientSecret"];
-                string audience = ConfigurationUtil.Configuration["Keycloak:Audience"];
+                string client_id = ConfigurationUtil.GetValue<string>("Keycloak:ClientId");
+                string client_secret = ConfigurationUtil.GetValue<string>("Keycloak:ClientSecret");
+                string audience = ConfigurationUtil.GetValue<string>("Keycloak:Audience");
                 string token = accessToken;
 
                 var form = new Dictionary<string, string>
