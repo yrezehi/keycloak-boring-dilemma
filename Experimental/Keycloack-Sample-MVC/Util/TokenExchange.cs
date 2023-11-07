@@ -23,12 +23,11 @@ namespace Keycloack_Sample_MVC.Util
                 //Important the grant type fro refresh token, must be set to this!
                 string grant_type = "password";
                 string client_id = ConfigurationUtil.GetValue<string>("Keycloak:ClientId");
-                string token = refreshToken;
 
                 var form = new Dictionary<string, string>
                 {
                     {"grant_type", grant_type},
-                    {"client_id", client_id},
+                    {"client_id", "test-client"},
                     {"username", "test@test.com"},
                     {"password", "password"},
                     {"client_secret", "Tgx4lvbyhho7oNFmiIupDRVA8ioQY7PW"}

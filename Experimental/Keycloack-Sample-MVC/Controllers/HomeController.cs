@@ -1,8 +1,10 @@
 ﻿using Keycloack_Sample_MVC.Models;
 using Keycloack_Sample_MVC.Util;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Keycloack_Sample_MVC.Controllers
@@ -14,6 +16,34 @@ namespace Keycloack_Sample_MVC.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+        }
+
+        public static JwtSecurityToken DecodeToken(string token)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jsonToken = handler.ReadToken(token);
+            return jsonToken as JwtSecurityToken;
+        }
+
+        public async Task<ActionResult> Callback()
+        {
+            var accessToken = HttpContext.Request.Headers["Authorization"];
+            var refreshToken = HttpContext.Request.Headers["RefreshToken"];
+            var decodedToken = DecodeToken(accessToken);
+            var username = decodedToken.Claims.FirstOrDefault(x => x.Type == "preferred_username").Value;
+            var fullname = decodedToken.Claims.FirstOrDefault(x => x.Type == "name").Value;
+            var claims = new[]
+            {
+                new Claim("UserName",username),
+                new Claim("FullName",fullname),
+                new Claim("AccessToken",accessToken.ToString()),
+                new Claim("RefreshToken",refreshToken.ToString()),
+            };
+
+            var identity = new ClaimsIdentity(claims, "keycloak_sso_auth");
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { });
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Index()
@@ -40,8 +70,7 @@ namespace Keycloack_Sample_MVC.Controllers
             //Remember to implement a logger with the default constructor for more visibility
             TokenExchange exchange = new TokenExchange();
             //Do a refresh token, if the service you need to call has a short lived token time
-            var newAccessToken = await exchange.GetRefreshTokenAsync(refreshToken);
-            var serviceAccessToken = await exchange.GetTokenExchangeAsync(newAccessToken);
+            var newAccessToken = await exchange.GetTokenAsync();
             //Use the access token to call the service that exchanged the token
             //Example:
             // MyService myService = new MyService/();
