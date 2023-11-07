@@ -27,6 +27,7 @@ builder.Services.AddAuthentication(options =>
                 cookie.Cookie.MaxAge = TimeSpan.FromMinutes(60);
                 cookie.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                 cookie.SlidingExpiration = true;
+                cookie.LoginPath = "/Login";
             })
             .AddOpenIdConnect(options =>
             {
@@ -69,8 +70,13 @@ builder.Services.AddAuthentication(options =>
                     RoleClaimType = ClaimTypes.Role,
                     ValidateIssuer = true
                 };
-
-
+                options.Events = new OpenIdConnectEvents
+                {
+                    OnRedirectToIdentityProvider = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+                };
             });
 
 var app = builder.Build();
@@ -94,5 +100,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "login-callback",
+    pattern: "login-callback",
+    defaults: new { controller = "Home", action = "Callback" });
 
 app.Run();

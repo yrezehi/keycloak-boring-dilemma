@@ -2,6 +2,8 @@
 using Keycloack_Sample_MVC.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
@@ -46,20 +48,16 @@ namespace Keycloack_Sample_MVC.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
+            await HttpContext.SignOutAsync();
             //Find claims for the current user
             ClaimsPrincipal currentUser = this.User;
             //Get username, for keycloak you need to regex this to get the clean username
             var currentUserName = currentUser.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             //logs an error so it's easier to find - thanks debug.
             _logger.LogError(currentUserName);
-
-            //Debug this line of code if you want to validate the content jwt.io
-            string accessToken = await HttpContext.GetTokenAsync("access_token");
-            string idToken = await HttpContext.GetTokenAsync("id_token");
-            string refreshToken = await HttpContext.GetTokenAsync("refresh_token");
-
 
             /*
              * Token exchange implementation
@@ -75,7 +73,18 @@ namespace Keycloack_Sample_MVC.Controllers
             //Example:
             // MyService myService = new MyService/();
             //var myService = await myService.GetDataAboutSomethingAsync(serviceAccessToken):
-            
+
+            var decodedToken = DecodeToken(newAccessToken);
+            var username = decodedToken.Claims.FirstOrDefault(x => x.Type == "preferred_username").Value;
+            var claims = new[]
+            {
+                new Claim("UserName",username),
+                new Claim("AccessToken",newAccessToken.ToString()),
+            };
+
+            var identity = new ClaimsIdentity(claims, "keycloak_sso_auth");
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties { });
 
             //Get all claims for roles that you have been granted access to 
             IEnumerable<Claim> roleClaims = User.FindAll(ClaimTypes.Role);
