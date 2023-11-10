@@ -13,19 +13,7 @@ namespace Keycloack_Sample_MVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public static JwtSecurityToken DecodeToken(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
-            return jsonToken as JwtSecurityToken;
-        }
+   
 
         public async Task<ActionResult> Callback()
         {
@@ -66,7 +54,7 @@ namespace Keycloack_Sample_MVC.Controllers
             
             //Call a token exchange to call another service in keycloak
             //Remember to implement a logger with the default constructor for more visibility
-            TokenExchange exchange = new TokenExchange();
+            TokenExchangeUtil exchange = new TokenExchangeUtil();
             //Do a refresh token, if the service you need to call has a short lived token time
             var newAccessToken = await exchange.GetTokenAsync();
             //Use the access token to call the service that exchanged the token

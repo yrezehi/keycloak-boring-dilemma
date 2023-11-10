@@ -47,7 +47,7 @@ builder.Services.AddAuthentication(options =>
                 //Keycloak client ID
                 options.ClientId = builder.Configuration.GetSection("Keycloak")["ClientId"];
                 //Keycloak client secret
-                //options.ClientSecret = builder.Configuration.GetSection("Keycloak")["ClientSecret"];
+                options.ClientSecret = builder.Configuration.GetSection("Keycloak")["ClientSecret"];
                 //Keycloak .wellknown config origin to fetch config
                 options.MetadataAddress = builder.Configuration.GetSection("Keycloak")["Metadata"];
                 //Require keycloak to use SSL
@@ -77,6 +77,7 @@ builder.Services.AddAuthentication(options =>
                         return Task.CompletedTask;
                     },
                 };
+                options.CallbackPath = "/Callback";
             });
 
 var app = builder.Build();
