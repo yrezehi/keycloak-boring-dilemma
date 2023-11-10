@@ -77,18 +77,10 @@ namespace Keycloack_Sample_MVC.Controllers
             //Get all claims for roles that you have been granted access to 
             IEnumerable<Claim> roleClaims = User.FindAll(ClaimTypes.Role);
             IEnumerable<string> roles = roleClaims.Select(r => r.Value);
-            foreach (var role in roles)
-            {
-                _logger.LogError(role);
-            }
 
             //Another way to display all role claims
             var currentClaims = currentUser.FindAll(ClaimTypes.Role).ToList();
-            foreach (var claim in currentClaims)
-            {
-                _logger.LogError(claim.ToString());
-            }
-
+         
             return View();
         }
 
