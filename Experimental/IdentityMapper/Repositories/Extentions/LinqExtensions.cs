@@ -1,6 +1,4 @@
-﻿using Callem.Models.DTO;
-using Callem.Models.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
 

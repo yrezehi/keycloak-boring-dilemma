@@ -6,6 +6,6 @@ namespace IdentityMapper.Services
     {
         public AuthenticationService() { }
 
-        public IList<Property> Authenticate() { }
+        public IList<IdentityProperty> Authenticate() => null;
     }
 }
